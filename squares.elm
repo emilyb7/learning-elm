@@ -1,6 +1,7 @@
 import Html exposing (..)
 import Html.Attributes  exposing (..)
 import Mouse exposing (..)
+import Array exposing (..)
 
 
 main =
@@ -17,10 +18,19 @@ main =
 type alias Model = String
 
 init: ( Model, Cmd Int )
-init = ("Nothing", Cmd.none)
+init = ("", Cmd.none)
 
 
 -- UPDATE
+
+color: Int -> String
+
+color n =
+  if
+    n > 150 && n < 250 then "pink"
+  else if
+    n > 300 && n < 400 then "turquoise"
+  else ""
 
 type Msg = Int
 
@@ -29,7 +39,7 @@ update : Int -> Model -> (Model, Cmd Int)
 update msg model =
   case msg of
     x ->
-    (toString x, Cmd.none)
+    (color x, Cmd.none)
 {--update msg model =
   case msg of
     Increment ->
