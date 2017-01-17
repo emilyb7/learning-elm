@@ -1,49 +1,52 @@
-import Html exposing (Html, div, text)
+import Html exposing (..)
 import Html.Attributes  exposing (..)
 import Mouse exposing (..)
 
 
 main =
-  Html.beginnerProgram { model = model, view = view, update = update }
+  Html.program {
+     init = init
+    , view = view
+    , update = update
+    , subscriptions = subscriptions
+  }
 
 
 -- MODEL
 
 type alias Model = String
 
-model : Model
-model =
-  "Nothing"
+init: ( Model, Cmd Int )
+init = ("Nothing", Cmd.none)
 
 
 -- UPDATE
 
-type Msg = Position Int Int
+type Msg = Int
 
-update : Msg -> Model -> Model
+update : Int -> Model -> (Model, Cmd Int)
 
 update msg model =
   case msg of
-    Position x y ->
-    "Turquoise"
+    x ->
+    (toString x, Cmd.none)
 {--update msg model =
   case msg of
     Increment ->
       ""
-
     Decrement ->
       ""--}
 
 -- SUBSCRIPTIONS
 
-subscriptions: Model -> Sub Msg
-subscriptions pos =
-  Mouse.moves (\{x, y} -> Position x y)
+subscriptions: Model -> Sub Int
+subscriptions model =
+  Mouse.moves (\{x, y} -> x )
 
 
 -- VIEW
 
-view : Model -> Html Msg
+view : Model -> Html Int
 view model =
   div [ style [
 
