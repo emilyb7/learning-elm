@@ -15,48 +15,43 @@ main =
 
 -- MODEL
 
-type alias Model = String
+type alias Model = { x : Int, y : Int, color: String }
 
-init: ( Model, Cmd Int )
-init = ("", Cmd.none)
+init: ( Model, Cmd Msg )
+init = ({ x = 0, y = 0, color = "" }, Cmd.none)
 
 
 -- UPDATE
 
-color: Int -> String
+color : Int -> Int -> String
+color x y =
+    if x > 150 && x < 250 && y > 150 && y < 250 then
+        "pink"
+    else if x > 300 && x < 400 && y > 150 && y < 250 then
+        "turquoise"
+    else
+        ""
 
-color n =
-  if
-    n > 150 && n < 250 then "pink"
-  else if
-    n > 300 && n < 400 then "turquoise"
-  else ""
+type Msg
+    = Position Int Int
 
-type Msg = Int
-
-update : Int -> Model -> (Model, Cmd Int)
-
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-  case msg of
-    x ->
-    (color x, Cmd.none)
-{--update msg model =
-  case msg of
-    Increment ->
-      ""
-    Decrement ->
-      ""--}
+    case msg of
+        Position x y ->
+            ( { model | color = color x y }, Cmd.none )
+
 
 -- SUBSCRIPTIONS
 
-subscriptions: Model -> Sub Int
+subscriptions : Model -> Sub Msg
 subscriptions model =
-  Mouse.moves (\{x, y} -> x )
+    Mouse.moves (\{ x, y } -> Position x y)
 
 
 -- VIEW
 
-view : Model -> Html Int
+view : Model -> Html Msg
 view model =
   div [ style [
 
@@ -91,11 +86,11 @@ view model =
       ("width", "250px"),
       ("textAlign", "center"),
       ("fontSize", "2em"),
-      ("color", model)
+      ("color", model.color)
 
 
 
-    ]] [ text model ]
+    ]] [ text model.color ]
 
 
     ]
